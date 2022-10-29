@@ -1,0 +1,14 @@
+// Mongoose est un package qui facilite les interactions avec la base de données MongoDB.
+const mongoose = require('mongoose'); 
+const uniqueValidator = require('mongoose-unique-validator');
+// Function schema avec les champs email et password
+const userSchema = mongoose.Schema({
+    // Champ email contenant l'objet avec le type, si il est requis et unique
+    email: { type: String, required: true, unique: true },
+    // Champ password contenant l'objet avec le type et si il est requis
+    password: { type: String, required: true} 
+}); 
+
+userSchema.plugin(uniqueValidator);
+// Export du model terminé grace à mongoose.model(avec le nom du model, schema du model)
+module.exports = mongoose.model('User', userSchema); 
