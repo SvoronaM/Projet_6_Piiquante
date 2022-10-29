@@ -5,7 +5,8 @@ const express = require('express');
 // Mongoose facilite les interactions avec la bdd MongoDB. Il nous permet de valider le format des données ; de gérer
 // les relations entre les documents ; de communiquer directement avec la bdd pour la lecture et l'écriture des documents
 const mongoose = require("mongoose");
-const path = require("path"); /* path fournit des utilitaires pour travailler avec les chemins de fichiers et de répertoires */
+// Path fournit des utilitaires pour travailler avec les chemins de fichiers et de répertoires
+const path = require("path");
 // Constante qui appelle express
 const app = express();
 //  App utilise le module express
