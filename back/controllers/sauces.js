@@ -23,7 +23,7 @@ exports.createSauce = (req, res, next) => {
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
         _id: req.params.id,
-    }) /* on recherche dans la bdd la sauce avec son id */
+    }) /* on recherche dans la bd la sauce avec son id */
         .then((sauce) => {
             /* et on la récupère */
             res.status(200).json(sauce);
@@ -36,7 +36,7 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.getAllSauce = (req, res, next) => {
-    Sauce.find() /* on recherche dans la bdd toutes les sauces */
+    Sauce.find() /* on recherche dans la bd toutes les sauces */
         .then((sauces) => {
             /* et on les récupère */
             res.status(200).json(sauces);
@@ -71,7 +71,7 @@ exports.modifySauce = (req, res, next) => {
     }) /* on recherche la sauce grâce à l'id récupéré dans la bdd */
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
-                /* si l'user id récupéré dans la bdd n'est pas le même que l'id user de l'auth */
+                /* si l'user id récupéré dans la bd n'est pas le même que l'id user de l'auth */
                 res.status(401).json({
                     message: "action non-autorisée",
                 }); /* alors c'est une action non authorisée */
