@@ -16,7 +16,11 @@ dotenv.config();
 //  App utilise le module express
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://OCR_1:LbwAITYsMCv16fZB@cluster0.xjpuzc3.mongodb.net/?retryWrites=true&w=majority',
+const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
+const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
+const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
+
+mongoose.connect(`mongodb+srv://${myAccount}:${myMdp}.${myDatabase}.mongodb.net/?retryWrites=true&w=majority`,
     { useNewUrlParser: true,
         useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -25,9 +29,6 @@ mongoose.connect('mongodb+srv://OCR_1:LbwAITYsMCv16fZB@cluster0.xjpuzc3.mongodb.
 const userRoutes = require('./routes/user'); /* Constante qui appelle le fichier user dans le dossier routes */
 const saucesRoutes = require('./routes/sauces'); /* Constante qui appelle le fichier sauces dans le dossier routes */
 
-const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
-const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
-const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
 // indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes); /* "/route attendu par le front-end", userRoutes */
