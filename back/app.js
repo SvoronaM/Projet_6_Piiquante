@@ -9,8 +9,19 @@ const mongoose = require("mongoose");
 const path = require("path");
 // Constante qui appelle express
 const app = express();
+// Dotenv charge les variables d'environnement d'un fichier .env dans un process.env
+const dotenv = require('dotenv');
+// Charge les variables d'environnement
+dotenv.config();
 //  App utilise le module express
 app.use(express.json());
+
+const userRoutes = require("./routes/user"); /* Constante qui appelle le fichier user dans le dossier routes */
+const saucesRoutes = require("./routes/sauces"); /* Constante qui appelle le fichier sauces dans le dossier routes */
+
+const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
+const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
+const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
