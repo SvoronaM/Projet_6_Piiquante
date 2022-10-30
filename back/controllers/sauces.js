@@ -1,4 +1,4 @@
-const Sauce = require("../models/Sauces"); /* appelle du fichier Sauces dans le dossier models */
+const Sauce = require("../models/Sauce"); /* appelle du fichier Sauces dans le dossier models */
 const fs = require("fs"); /* package qui fournit des fonctionnalités très utiles pour accéder et interagir avec le système de fichiers */
 
 exports.createSauce = (req, res, next) => {
