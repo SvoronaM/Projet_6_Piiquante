@@ -16,6 +16,12 @@ dotenv.config();
 //  App utilise le module express
 app.use(express.json());
 
+mongoose.connect('mongodb+srv://OCR_1:LbwAITYsMCv16fZB@cluster0.xjpuzc3.mongodb.net/?retryWrites=true&w=majority',
+    { useNewUrlParser: true,
+        useUnifiedTopology: true })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));/* Permet de connecter l'API à la bd */
+
 const userRoutes = require("./routes/user"); /* Constante qui appelle le fichier user dans le dossier routes */
 const saucesRoutes = require("./routes/sauces"); /* Constante qui appelle le fichier sauces dans le dossier routes */
 
