@@ -28,13 +28,10 @@ const saucesRoutes = require("./routes/sauces"); /* Constante qui appelle le fic
 const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
 const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+// indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
+app.use("/images", express.static(path.join(__dirname, "images"))); 
+app.use("/api/auth", userRoutes); /* "/route attendu par le front-end", userRoutes */
+app.use("/api", saucesRoutes); /* "/route attendu par le front-end", saucesRoutes */
 
 // Export app pour y accéder depuis d'autres fichiers de projet
 module.exports = app;
