@@ -11,9 +11,9 @@ const MIME_TYPES = {
 // Utilisation de la function diskStorage pour dire que l'on va enregistrer sur le disque
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        // Callback enregistre l'image sur images
-            callback(null, 'images');
-            // Sinon si le dossier existe
+        if (!fs.existsSync('images')) { /* si le dossier images n'existe pas */
+            fs.mkdirSync('images'); /* créé un dossier images */
+            callback(null, 'images'); /* le callback enregistre l'image sur images */
         } else {
         // Callback enregistre l'image sur images
             callback(null, 'images');
