@@ -9,12 +9,17 @@ const mongoose = require('mongoose');
 const path = require('path');
 // Constante qui appelle express
 const app = express();
+// installation de cors (CORS signifie « Cross Origin Resource Sharing ». Il s'agit d'un système de sécurité qui, par
+// défaut, bloque les appels HTTP entre des serveurs différents, ce qui empêche donc les requêtes malveillantes d'accéder à des ressources sensibles.) Par défaut, les requêtes AJAX sont interdites
+const cors = require('cors');
 // Dotenv charge les variables d'environnement d'un fichier .env dans un process.env
 const dotenv = require('dotenv');
 // Charge les variables d'environnement
 dotenv.config();
-//  App utilise le module express
+//  app utilise le module express
 app.use(express.json());
+// app utilise le module cors
+app.use(cors()); 
 
 const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
