@@ -4,9 +4,9 @@
 const express = require('express');
 // Mongoose facilite les interactions avec la bdd MongoDB. Il nous permet de valider le format des données ; de gérer
 // les relations entre les documents ; de communiquer directement avec la bdd pour la lecture et l'écriture des documents
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 // Path fournit des utilitaires pour travailler avec les chemins de fichiers et de répertoires
-const path = require("path");
+const path = require('path');
 // Constante qui appelle express
 const app = express();
 // Dotenv charge les variables d'environnement d'un fichier .env dans un process.env
@@ -22,16 +22,16 @@ mongoose.connect('mongodb+srv://OCR_1:LbwAITYsMCv16fZB@cluster0.xjpuzc3.mongodb.
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));/* Permet de connecter l'API à la bd */
 
-const userRoutes = require("./routes/user"); /* Constante qui appelle le fichier user dans le dossier routes */
-const saucesRoutes = require("./routes/sauces"); /* Constante qui appelle le fichier sauces dans le dossier routes */
+const userRoutes = require('./routes/user'); /* Constante qui appelle le fichier user dans le dossier routes */
+const saucesRoutes = require('./routes/sauces'); /* Constante qui appelle le fichier sauces dans le dossier routes */
 
 const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
 const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
 // indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
-app.use("/images", express.static(path.join(__dirname, "images"))); 
-app.use("/api/auth", userRoutes); /* "/route attendu par le front-end", userRoutes */
-app.use("/api", saucesRoutes); /* "/route attendu par le front-end", saucesRoutes */
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/auth', userRoutes); /* "/route attendu par le front-end", userRoutes */
+app.use('/api/sauces', saucesRoutes); /* "/route attendu par le front-end", saucesRoutes */
 
 // Export app pour y accéder depuis d'autres fichiers de projet
 module.exports = app;
