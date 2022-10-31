@@ -10,12 +10,7 @@ const MIME_TYPES = {
 };
 const storage = multer.diskStorage({ /* utilisation de la function diskStorage pour dire que l'on va enregistrer sur le disque */
     destination: (req, file, callback) => { /* function qui a besoin de 2 elements : destination et filename */
-        if (!fs.existsSync('images')) { /* si le dossier images n'existe pas */
-            fs.mkdirSync('images'); /* créé un dossier images */
-            callback(null, 'images'); /* le callback enregistre l'image sur images */
-        } else { /* sinon si le dossier existe */
-            callback(null, 'images'); /* le callback enregistre l'image sur images */
-        }
+        callback(null, 'images');
     },
     filename: (req, file, callback) => { /* argument filename qui explique à multer quel nom de fichier utiliser */
         const name = file.originalname.split(' ').join('_'); /* genere le nouveau nom avec une séparation du nom original et qui les remplace par le _ en les join en 1 seul string */
