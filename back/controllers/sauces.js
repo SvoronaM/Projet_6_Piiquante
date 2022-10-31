@@ -7,12 +7,12 @@ exports.createSauce = (req, res, next) => {
     ); /* récupère les informations du formulaire */
     delete sauceObject._id; /* supprimer le faux id envoyé par le front */
     const sauce = new Sauce({
-        ...sauceObject /* Le spread ... est utilisé pour faire une copie de tous les éléments de sauceObject */,
+        ...sauceObject , /* Le spread ... est utilisé pour faire une copie de tous les éléments de sauceObject */
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
-        }` /* on ajoute l'image */,
-        likes: 0 /* on ajoute le like à 0 */,
-        dislikes: 0 /* on ajoute le dislike à 0*/,
+        }`, /* on ajoute l'image */
+        likes: 0 , /* on ajoute le like à 0 */
+        dislikes: 0 , /* on ajoute le dislike à 0*/
     });
     sauce
         .save() /* on sauvegarde la sauce */
@@ -56,10 +56,10 @@ exports.modifySauce = (req, res, next) => {
             /* alors on récupère notre objet  */
             ...JSON.parse(
                 req.body.sauce
-            ) /* en parsant la chaine de caractères (transforme un objet stringifié en Object JavaScript exploitable) */,
+            ) , /* en parsant la chaine de caractères (transforme un objet stringifié en Object JavaScript exploitable) */
             imageUrl: `${req.protocol}://${req.get("host")}/images/${
                 req.file.filename
-            }` /* et on recréé l'URL complète de l'image */,
+            }`, /* et on recréé l'URL complète de l'image */
         };
     } else {
         /* sinon si il n'y a pas de fichier transmis */
@@ -80,7 +80,7 @@ exports.modifySauce = (req, res, next) => {
                     /* sinon c'est ok, on met ensuite à jour */
                     {
                         _id: req.params.id,
-                    } /* 1er argument : id de l'objet que l'on souhaite modifier */,
+                    } , /* 1er argument : id de l'objet que l'on souhaite modifier */
                     {
                         ...sauceObject,
                         _id: req.params.id,
@@ -130,7 +130,7 @@ exports.likedSauce = (req, res, next) => {
                 .catch((error) => res.status(400).json({ error }));
         } else if (req.body.like == -1 && !sauce.usersDisliked.includes(req.body.userId)) {/* sinon si l'utilisateur dislike une sauce */
             Sauce.updateOne(/* on met à jour la sauce de la page */
-                { _id: req.params.id } /* on récupère l'id dans la bdd */,
+                { _id: req.params.id } , /* on récupère l'id dans la bdd */
                 {
                     $inc: { dislikes: 1 },/* on lui ajoute 1 dislike et on push l'id de l'utilisateur qui a liké dans la sauce */
                     $push: { usersDisliked: req.body.userId },
