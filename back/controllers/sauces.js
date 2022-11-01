@@ -25,9 +25,9 @@ exports.createSauce = (req, res, next) => {
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
         _id: req.params.id,
-    }) /* on recherche dans la bd la sauce avec son id */
+    }) /* On recherche dans la bd la sauce avec son id */
         .then((sauce) => {
-            /* et on la récupère */
+            /* On la récupère */
             res.status(200).json(sauce);
         })
         .catch((error) => {
@@ -38,9 +38,9 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.getAllSauce = (req, res, next) => {
-    Sauce.find() /* on recherche dans la bd toutes les sauces */
+    Sauce.find() /* On recherche dans la bd toutes les sauces */
         .then((sauces) => {
-            /* et on les récupère */
+            /* On les récupère */
             res.status(200).json(sauces);
         })
         .catch((error) => {
@@ -51,42 +51,42 @@ exports.getAllSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-    var sauceObject = {}; /* on crée un objet SauceObject vide */
+    let sauceObject = {}; /* On crée un objet SauceObject vide */
     if (req.file) {
-        /* si on upload un fichier */
+        /* Si on upload un fichier */
         sauceObject = {
-            /* alors on récupère notre objet  */
+            /* On récupère notre objet  */
             ...JSON.parse(
                 req.body.sauce
-            ) , /* en parsant la chaine de caractères (transforme un objet stringifié en Object JavaScript exploitable) */
+            ), /* En parsant la chaine de caractères (transforme un objet stringifié en Object JavaScript exploitable) */
             imageUrl: `${req.protocol}://${req.get("host")}/images/${
                 req.file.filename
-            }`, /* et on recréé l'URL complète de l'image */
+            }`, /* Et on recréé l'URL complète de l'image */
         };
     } else {
-        /* sinon si il n'y a pas de fichier transmis */
-        sauceObject = { ...req.body }; /* on récupère le body de la requête */
+        // Sinon si il n'y a pas de fichier transmis
+        sauceObject = { ...req.body }; /* On récupère body de la requête */
     }
-    delete sauceObject._userId; /* on supprime l'user id recupéré par le nouvel objet par sécurité */
+    delete sauceObject._userId; /* On supprime l'user id recupéré par le nouvel objet par sécurité */
     Sauce.findOne({
-        _id: req.params.id,
-    }) /* on recherche la sauce grâce à l'id récupéré dans la bdd */
+        _id: req.params.id, /* on recherche la sauce grâce à l'id récupéré dans la bdd */
+    })
         .then((sauce) => {
+            // Si l'user id récupéré dans la bd n'est pas le même que id user de auth
             if (sauce.userId != req.auth.userId) {
-                /* si l'user id récupéré dans la bd n'est pas le même que l'id user de l'auth */
                 res.status(401).json({
-                    message: "action non-autorisée",
-                }); /* alors c'est une action non authorisée */
+                    message: "action non-autorisée", /* C'est une action non authorisée */
+                });
             } else {
+                // Sinon c'est ok, on met ensuite à jour
                 Sauce.updateOne(
-                    /* sinon c'est ok, on met ensuite à jour */
                     {
-                        _id: req.params.id,
-                    } , /* 1er argument : id de l'objet que l'on souhaite modifier */
+                        _id: req.params.id, /* 1er argument : id de l'objet que l'on souhaite modifier */
+                    } ,
                     {
                         ...sauceObject,
-                        _id: req.params.id,
-                    } /* 2nd argument : nouvelle version de l'objet, l'id correspond à celui da la bdd */
+                        _id: req.params.id, /* 2nd argument : nouvelle version de l'objet, l'id correspond à celui da la bd */
+                    }
                 )
                     .then(() => res.status(200).json({ message: "Sauce modifiée !" }))
                     .catch((error) => res.status(400).json({ error }));
@@ -99,13 +99,13 @@ exports.modifySauce = (req, res, next) => {
 
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({
-        _id: req.params.id, /* on recherche dans la bdd la sauce avec son id */
+        _id: req.params.id, /* On recherche dans la bd la sauce avec son id */
     })
         .then((sauce) => {
             const filename = sauce.imageUrl.split("/images/")[1];
             Sauce.deleteOne({
-                _id: req.params.id,
-            }) /* on supprime la sauce ayant l'id recupéré dans la bdd */
+                _id: req.params.id, /* On supprime la sauce ayant l'id recupéré dans la bd */
+            })
                 .then(() => {
                     fs.unlink(`images/${filename}`, () => {});
                     res.status(200).json({ message: "Sauce supprimée !" });
@@ -129,12 +129,12 @@ exports.likedSauce = (req, res, next) => {
                     res.status(200).json({ message: "Vous avez liké la sauce ! :)" })
                 )
                 .catch((error) => res.status(400).json({ error }));
-        } else if (req.body.like == -1 && !sauce.usersDisliked.includes(req.body.userId)) {/* sinon si l'utilisateur dislike une sauce */
-            Sauce.updateOne(/* on met à jour la sauce de la page */
-                { _id: req.params.id } , /* on récupère l'id dans la bdd */
+        } else if (req.body.like == -1 && !sauce.usersDisliked.includes(req.body.userId)) {/* Sinon si l'utilisateur dislike une sauce */
+            Sauce.updateOne(/* On met à jour la sauce de la page */
+                { _id: req.params.id } , /* On récupère l'id dans la bdd */
                 {
-                    $inc: { dislikes: 1 },/* on lui ajoute 1 dislike et on push l'id de l'utilisateur qui a liké dans la sauce */
-                    $push: { usersDisliked: req.body.userId },
+                    $inc: { dislikes: 1 },/* On lui ajoute 1 dislike */
+                    $push: { usersDisliked: req.body.userId }, /* et on push l'id de l'utilisateur qui a liké dans la sauce */
                 }
             )
                 .then(() =>
@@ -142,23 +142,23 @@ exports.likedSauce = (req, res, next) => {
                 )
                 .catch((error) => res.status(400).json({ error }));
         } else {
-            /* sinon */
-            if (sauce.usersLiked.includes(req.body.userId)) {/* si l'userId est présent dans les usersLiked alors */
-                Sauce.updateOne(/* on met à jour la sauce */
+            // Sinon
+            if (sauce.usersLiked.includes(req.body.userId)) { /* Si l'userId est présent dans les usersLiked alors */
+                Sauce.updateOne( /* On met à jour la sauce */
                     {
-                        _id: req.params.id, /* on récupère l'id de la sauce dans la bdd */
+                        _id: req.params.id, /* On récupère l'id de la sauce dans la bd */
                     },
                     {
-                        $inc: { likes: -1 },
-                        $pull: { usersLiked: req.body.userId },
-                    } /* on retire un like et on retire l'utilisateur des usersLiked */
+                        $inc: { likes: -1 }, /* On retire un like  */
+                        $pull: { usersLiked: req.body.userId }, /* Et on retire l'utilisateur des usersLiked */
+                    }
                 )
                     .then(() =>
                         res.status(200).json({ message: "Vous avez disliké la sauce ! :(" })
                     )
                     .catch((error) => res.status(400).json({ error }));
-            } else if (sauce.usersDisliked.includes(req.body.userId)) {/* sinon si l'userId est présent dans les usersDisliked alors */
-                Sauce.updateOne(/* on met à jour la sauce */
+            } else if (sauce.usersDisliked.includes(req.body.userId)) { /* Sinon si l'userId est présent dans les usersDisliked alors */
+                Sauce.updateOne( /* On met à jour la sauce */
                     {
                         _id: req.params.id,/* on récupère l'id de la sauce dans la bdd */
                     },
