@@ -1,21 +1,23 @@
-const Sauce = require("../models/Sauce"); /* appelle du fichier Sauces dans le dossier models */
-const fs = require("fs"); /* package qui fournit des fonctionnalités très utiles pour accéder et interagir avec le système de fichiers */
+// Appelle du fichier Sauces dans le dossier models
+const Sauce = require("../models/Sauce");
+// Package qui fournit des fonctionnalités très utiles pour accéder et interagir avec le système de fichiers
+const fs = require("fs");
 
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(
+    const sauceObject = JSON.parse( /* Récupère les informations du formulaire */
         req.body.sauce
-    ); /* récupère les informations du formulaire */
-    delete sauceObject._id; /* supprimer le faux id envoyé par le front */
+    );
+    delete sauceObject._id; /* Supprimer le faux id envoyé par le front */
     const sauce = new Sauce({
         ...sauceObject , /* Le spread ... est utilisé pour faire une copie de tous les éléments de sauceObject */
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${ /* On ajoute l'image */
             req.file.filename
-        }`, /* on ajoute l'image */
-        likes: 0 , /* on ajoute le like à 0 */
-        dislikes: 0 , /* on ajoute le dislike à 0*/
+        }`,
+        likes: 0 , /* On ajoute le like à 0 */
+        dislikes: 0 , /* On ajoute le dislike à 0 */
     });
     sauce
-        .save() /* on sauvegarde la sauce */
+        .save() /* On sauvegarde la sauce */
         .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
         .catch((error) => res.status(400).json({ error }));
 };
@@ -115,14 +117,13 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.likedSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }).then((sauce) => {
-        if (req.body.like == 1 && !sauce.usersLiked.includes(req.body.userId)) {/* si l'utilisateur like une sauce */
-            Sauce.updateOne(/* on met a jour la sauce de la page */
-                { _id: req.params.id } /* on récupère l'id dans la bdd */,
+        if (req.body.like == 1 && !sauce.usersLiked.includes(req.body.userId)) {/* Si l'utilisateur like une sauce */
+            Sauce.updateOne(/* On met a jour la sauce de la page */
+                { _id: req.params.id }, /* On récupère l'id dans la bd */
                 {
-                    $inc: { likes: 1 }, /* (l'opérateur $inc incrémente un champ d'une valeur spécifiée) on lui ajoute 1 like et on push l'id de l'utilisateur qui a liké dans la sauce */
+                    $inc: { likes: 1 }, /* (L'opérateur $inc incrémente un champ d'une valeur spécifiée) on lui ajoute 1 like et on push l'id de l'utilisateur qui a liké dans la sauce */
                     $push: { usersLiked: req.body.userId },
                 }
-                // console.log(Sauce.usersLiked)
             )
                 .then(() =>
                     res.status(200).json({ message: "Vous avez liké la sauce ! :)" })
