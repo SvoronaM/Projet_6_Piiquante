@@ -1,7 +1,7 @@
 // Mongoose est un package qui facilite les interactions avec la base de données MongoDB.
 const mongoose = require('mongoose'); 
 const uniqueValidator = require('mongoose-unique-validator');
-// Function schema avec les champs email et password
+// Function schema avec les champs email et password permet de créer un schéma de données pour base de données MongoDB.
 const userSchema = mongoose.Schema({
     // Champ email contenant l'objet avec le type, si il est requis et unique
     email: { type: String, required: true, unique: true },
