@@ -160,11 +160,11 @@ exports.likedSauce = (req, res, next) => {
             } else if (sauce.usersDisliked.includes(req.body.userId)) { /* Sinon si l'userId est présent dans les usersDisliked alors */
                 Sauce.updateOne( /* On met à jour la sauce */
                     {
-                        _id: req.params.id,/* on récupère l'id de la sauce dans la bdd */
+                        _id: req.params.id, /* On récupère l'id de la sauce dans la bdd */
                     },
                     {
-                        $inc: { dislikes: -1 },/* on retire un dislike et on retire l'utilisateur des usersLiked */
-                        $pull: { usersDisliked: req.body.userId },
+                        $inc: { dislikes: -1 }, /* On retire un dislike */
+                        $pull: { usersDisliked: req.body.userId }, /*et on retire l'utilisateur des usersLiked */
                     }
                 )
                     .then(() =>
