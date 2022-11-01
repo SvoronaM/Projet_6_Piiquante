@@ -1,5 +1,6 @@
 // Mongoose est un package qui facilite les interactions avec la base de données MongoDB.
-const mongoose = require('mongoose'); 
+const mongoose = require('mongoose');
+// mongoose-unique-validator un plugin qui ajoute une validation de pré-enregistrement pour les champs uniques dans un schéma Mongoose.
 const uniqueValidator = require('mongoose-unique-validator');
 // Function schema avec les champs email et password permet de créer un schéma de données pour base de données MongoDB.
 const userSchema = mongoose.Schema({
