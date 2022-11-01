@@ -4,12 +4,12 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 // Package permettant de créer et vérifier les tokens d'authentification
 const jwt = require('jsonwebtoken');
-/* ici nous créons les middleware.
-Un middleware est un bloc de code qui traite les requêtes et réponses de votre application. Chaque élément de middleware
-reçoit les objets request et response, peut les lire, les analyser et les manipuler, le cas échéant. (req, res, next)
-La méthode next permet à chaque middleware de passer l'exécution au middleware suivant. */
+// ici nous créons les middleware.
+// Un middleware est un bloc de code qui traite les requêtes et réponses de l'application. Chaque élément de middleware
+// reçoit les objets request et response, peut les lire, les analyser et les manipuler. (req, res, next)
+// La méthode next permet à chaque middleware de passer l'exécution au middleware suivant.
 exports.signup = (req, res, next) => {
-    // Crée un hash crypté du mdp user pour les enregistrer de manière sécurisée dans la bdd. Le 10 : demande« saler » le mdp 10 fois. (+ valeur élevée, + longue exécution, hachage + sécurisé)
+    // Crée un hash crypté du mdp user pour les enregistrer de manière sécurisée dans la bd. Le 10 : demande « saler » le mdp 10 fois. (+ valeur élevée, + longue exécution, hachage + sécurisé)
     bcrypt.hash(req.body.password, 10)
         .then(hash => { /* On recupere le hash */
             const user = new User({ /* On crée le nouvel utilisateur avec le model mongoose */
@@ -36,7 +36,7 @@ exports.login = (req, res, next) => {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' }); /* Si ne correspond pas, on renvoie une erreur */
                     }
                     res.status(200).json({ /* Sinon on retourne un objet avec les info necessaires à l'authentification de requetes emises à l'utilisateur */
-                        userId: user._id, /* id d'utilisateur */
+                        userId: user._id, /* Id d'utilisateur */
                         token: jwt.sign( /*Fonction sign par jsonwebtoken */
                             { userId: user._id }, /* 1er argument : l'id de l'utilisateur pour verifier que c'est bien cet user */
                             'RANDOM_TOKEN_SECRET', /* 2e argument : clé d'encodage du token (a changer lors de la mise en prod) */
@@ -44,7 +44,7 @@ exports.login = (req, res, next) => {
                         )
                     });
                 })
-                .catch(error => res.status(500).json({ error }));/* un problème de serveur interne */
+                .catch(error => res.status(500).json({ error }));/* Un problème de serveur interne */
         })
         .catch(error => res.status(500).json({ error }));
 };
