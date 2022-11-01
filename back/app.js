@@ -2,7 +2,7 @@
 // l'application Express est fondamentalement une série de fonctions appelées MIDDLEWARE. Chaque élément de middleware
 // reçoit les objets request et response, peut les lire, les analyser et les manipuler.(req, res, next)
 const express = require('express');
-// Mongoose facilite les interactions avec la bdd MongoDB. Il nous permet de valider le format des données ; de gérer
+// Mongoose facilite les interactions avec la bd MongoDB. Il nous permet de valider le format des données ; de gérer
 // les relations entre les documents ; de communiquer directement avec la bdd pour la lecture et l'écriture des documents
 const mongoose = require('mongoose');
 // Path fournit des utilitaires pour travailler avec les chemins de fichiers et de répertoires
@@ -21,26 +21,25 @@ app.use(express.json());
 // app utilise le module cors
 app.use(cors()); 
 
-const myAccount = process.env.account; /* constante qui va chercher la variable d'environnement account dans le fichier .env */
-const myMdp = process.env.mdp; /* constante qui va chercher la variable d'environnement mdp dans le fichier .env */
-const myDatabase = process.env.database; /* constante qui va chercher la variable d'environnement database dans le fichier .env */
-
+const myAccount = process.env.account; /* Constante qui va chercher la variable d'environnement account dans le fichier .env */
+const myMdp = process.env.mdp; /* Constante qui va chercher la variable d'environnement mdp dans le fichier .env */
+const myDatabase = process.env.database; /* Constante qui va chercher la variable d'environnement database dans le fichier .env */
+// Permet de connecter l'API à la bd
 mongoose.connect(`mongodb+srv://${myAccount}:${myMdp}.${myDatabase}.mongodb.net/?retryWrites=true&w=majority`,
     { useNewUrlParser: true,
         useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));/* Permet de connecter l'API à la bd */
-
-const userRoutes = require('./routes/user'); /* Constante qui appelle le fichier user dans le dossier routes */
-const saucesRoutes = require('./routes/sauces'); /* Constante qui appelle le fichier sauces dans le dossier routes */
-
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
+// Ces headers permettent :
 app.use((req, res, next) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        res.setHeader('Access-Control-Allow-Origin', '*'); /* d'accéder à API depuis n'importe quelle origine */
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'); /* d'ajouter les headers mentionnés aux requêtes envoyées vers notre API */
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); /* d'envoyer des requêtes avec les méthodes mentionnées */
         next();
 });
 
+const userRoutes = require('./routes/user'); /* Constante qui appelle le fichier user dans le dossier routes */
+const saucesRoutes = require('./routes/sauces'); /* Constante qui appelle le fichier sauces dans le dossier routes */
 // indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes); /* "/route attendu par le front-end", userRoutes */
