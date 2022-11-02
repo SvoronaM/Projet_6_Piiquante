@@ -14,12 +14,16 @@ const app = express();
 const cors = require('cors');
 // Dotenv charge les variables d'environnement d'un fichier .env dans un process.env
 const dotenv = require('dotenv');
+// Helmet aide à sécuriser applications Express en définissant divers en-têtes HTTP
+const helmet = require("helmet");
 // Charge les variables d'environnement
 dotenv.config();
 //  app utilise le module express
 app.use(express.json());
 // app utilise le module cors
-app.use(cors()); 
+app.use(cors());
+// app utilise le module helmet
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 const myAccount = process.env.account; /* Constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* Constante qui va chercher la variable d'environnement mdp dans le fichier .env */
