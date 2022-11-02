@@ -22,7 +22,7 @@ dotenv.config();
 app.use(express.json());
 // app utilise le module cors
 app.use(cors());
-// app utilise le module helmet
+// app utilise le module helmet, je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 const myAccount = process.env.account; /* Constante qui va chercher la variable d'environnement account dans le fichier .env */
