@@ -16,9 +16,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 // Helmet aide à sécuriser applications Express en définissant divers en-têtes HTTP
 const helmet = require("helmet");
-
+// Analysez les corps de requête entrants dans un middleware
 const bodyParser = require('body-parser');
-
+// Ce module recherche toutes les clés dans les objets commençant par un $ signe ou contenant un . , req.body de req.query ou req.params
 const mongoSanitize = require('express-mongo-sanitize');
 // Charge les variables d'environnement
 dotenv.config();
@@ -28,10 +28,17 @@ app.use(express.json());
 app.use(cors());
 // app utilise le module helmet, je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-
 app.use(bodyParser.urlencoded({ extended: true }));
-
+// Par défaut, $ et . les caractères sont complètement supprimés de l'entrée fournie par l'utilisateur aux emplacements suivants :
+// - req.body
+// - req.params
+// - req.headers
+// - req.query
 app.use(bodyParser.json());
+// Pour supprimer des données à l'aide de ces valeurs par défaut :
+app.use(mongoSanitize());
+// Ou, pour remplacer ces caractères interdits par _, utilisez :
+app.use(mongoSanitize({replaceWith: '_',}),);
 
 const myAccount = process.env.account; /* Constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* Constante qui va chercher la variable d'environnement mdp dans le fichier .env */
