@@ -16,6 +16,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 // Helmet aide à sécuriser applications Express en définissant divers en-têtes HTTP
 const helmet = require("helmet");
+
+const bodyParser = require('body-parser');
+
+const mongoSanitize = require('express-mongo-sanitize');
 // Charge les variables d'environnement
 dotenv.config();
 //  app utilise le module express
@@ -24,6 +28,10 @@ app.use(express.json());
 app.use(cors());
 // app utilise le module helmet, je protège l'appli de certaines vulnerabilités en protégeant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
 
 const myAccount = process.env.account; /* Constante qui va chercher la variable d'environnement account dans le fichier .env */
 const myMdp = process.env.mdp; /* Constante qui va chercher la variable d'environnement mdp dans le fichier .env */
