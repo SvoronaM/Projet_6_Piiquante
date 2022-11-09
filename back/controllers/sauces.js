@@ -103,6 +103,13 @@ exports.deleteSauce = (req, res, next) => {
     })
         .then((sauce) => {
             const filename = sauce.imageUrl.split("/images/")[1];
+            // Si l'user id récupéré dans la bd n'est pas le même que id user de auth
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({
+                    message: "action non-autorisée", /* C'est une action non authorisée */
+                });
+            } else {
+                // Sinon c'est ok, on met ensuite à jour
             Sauce.deleteOne({
                 _id: req.params.id, /* On supprime la sauce ayant l'id recupéré dans la bd */
             })
@@ -117,7 +124,7 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.likedSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }).then((sauce) => {
-        if (req.body.like == 1 && !sauce.usersLiked.includes(req.body.userId)) {/* Si l'utilisateur like une sauce */
+        if (req.body.like == 1 && !sauce.usersLiked.includes(req.auth.userId)) {/* Si l'utilisateur like une sauce */
             Sauce.updateOne(/* On met a jour la sauce de la page */
                 { _id: req.params.id }, /* On récupère l'id dans la bd */
                 {
